@@ -10,7 +10,9 @@ namespace CustomWaterLevelBZ
         public float WaterLevel = 0f;
         [Toggle(Label = "Suffocate fish", Tooltip = "Whether fish should suffocate when above water or not.")]
         public bool SuffocateFish = true;
-        [Toggle(Label = "Remove ALL shoals of fish", Tooltip = "Whether ALL shoals of fish (regardless of Y position) should be removed from the mod.")]
+        [Toggle(Label = "Remove ALL shoals of fish", Tooltip = "Whether ALL shoals of fish (regardless of depth) should be removed from the game. They may ruin the immersion.")]
         public bool RemoveSchoolsOfFish = false;
+        [Toggle(Label = "Mobile Vehicle Bay Fix", Tooltip = "If enabled, allows you to deploy Mobile Vehicle Bays on land.")]
+        public bool FixConstructor = true;
     }
 }

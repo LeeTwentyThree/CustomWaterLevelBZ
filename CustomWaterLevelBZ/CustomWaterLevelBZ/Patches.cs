@@ -117,5 +117,65 @@ namespace CustomWaterLevelBZ
                 }
             }
         }
+
+        [HarmonyPatch(typeof(Hoverbike))]
+        internal static class HoverBike_Patches
+        {
+            [HarmonyPatch(nameof(Hoverbike.Start))]
+            [HarmonyPostfix]
+            public static void Start_Postfix(Hoverbike __instance)
+            {
+                __instance.waterLevelOffset += Mod.WaterLevel;
+            }
+
+            [HarmonyPatch(nameof(Hoverbike.AllowedToPilot))]
+            [HarmonyPostfix]
+            public static void AllowedToPilot_Postfix(Hoverbike __instance, ref bool __result)
+            {
+                __result = __instance.transform.position.y > Mod.WaterLevel;
+            }
+        }
+
+        [HarmonyPatch(typeof(Constructor))]
+        [HarmonyPatch(nameof(Constructor.OnRightHandDown))]
+        internal static class Constructor_OnRightHandDown_Patch
+        {
+            [HarmonyPrefix]
+            public static bool Prefix()
+            {
+                if (Mod.config.FixConstructor)
+                {
+                    return false; // skip original method
+                }
+                return true;
+            }
+            [HarmonyPostfix]
+            public static void Postfix(Constructor __instance, ref bool __result)
+            {
+                if (!Mod.config.FixConstructor)
+                {
+                    return;
+                }
+                if (__result == true)
+                {
+                    return; // if we already deployed it, we don't need to deploy a second MBV!
+                }
+                if (PrecursorMoonPoolTrigger.inMoonpool || PrisonManager.IsInsideAquarium(__instance.transform.position) || Player.main.IsInSub())
+                {
+                    ErrorMessage.AddMessage("Can't deploy here!");
+                    return; // don't need to throw it if you're inside a precursor base, or your own base
+                }
+                // I nabbed this from dnSpy, that's why it looks so weird
+                Vector3 forward = MainCamera.camera.transform.forward;
+                __instance.pickupable.Drop(__instance.transform.position + forward * 0.7f + Vector3.down * 0.3f, default(Vector3));
+                __instance.GetComponent<Rigidbody>().AddForce(forward * 6.5f, ForceMode.VelocityChange);
+                __instance.Deploy(true);
+                __instance.OnDeployAnimationStart();
+                LargeWorldEntity.Register(__instance.gameObject);
+                Utils.PlayEnvSound(__instance.releaseSound, MainCamera.camera.transform.position, 20f);
+                GoalManager.main.OnCustomGoalEvent("Release_Constructor");
+                __result = true; // play the animation
+            }
+        }
     }
 }
