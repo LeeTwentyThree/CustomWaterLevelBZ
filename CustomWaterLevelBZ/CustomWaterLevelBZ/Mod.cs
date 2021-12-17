@@ -2,6 +2,7 @@
 using HarmonyLib;
 using SMLHelper.V2.Handlers;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace CustomWaterLevelBZ
 {
@@ -26,5 +27,25 @@ namespace CustomWaterLevelBZ
                 return config.WaterLevel;
             }
         }
+
+        public static readonly List<TechType> AirBreathingCreatures = new List<TechType>()
+        {
+            TechType.SpikeyTrap,
+            TechType.SnowStalker,
+            TechType.SnowStalkerBaby,
+            TechType.Pinnacarid,
+            TechType.RockPuncher,
+            TechType.Penguin,
+            TechType.PenguinBaby,
+            TechType.Skyray,
+            TechType.SpinnerFish,
+            TechType.TrivalveBlue,
+            TechType.TrivalveYellow,
+            TechType.Rockgrub,
+            TechType.IceWorm,
+            TechType.IceWormSpawner,
+            TechType.LargeVentGarden,
+            TechType.SmallVentGarden
+        };
     }
 }

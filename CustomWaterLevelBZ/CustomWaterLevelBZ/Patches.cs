@@ -112,6 +112,11 @@ namespace CustomWaterLevelBZ
                     var yPos = __instance.transform.position.y;
                     if (yPos > Mod.WaterLevel + 3f)
                     {
+                        var creatureTechType = CraftData.GetTechType(__instance.gameObject);
+                        if (Mod.AirBreathingCreatures.Contains(creatureTechType))
+                        {
+                            return;
+                        }
                         __instance.liveMixin.Kill();
                     }
                 }
@@ -133,6 +138,17 @@ namespace CustomWaterLevelBZ
             public static void AllowedToPilot_Postfix(Hoverbike __instance, ref bool __result)
             {
                 __result = __instance.transform.position.y > Mod.WaterLevel;
+            }
+        }
+
+        [HarmonyPatch(typeof(Hoverbike))]
+        [HarmonyPatch(nameof(Hoverbike.Awake))]
+        internal static class Hoverbike_Awake_Patch
+        {
+            [HarmonyPostfix]
+            public static void Postfix(Hoverbike __instance)
+            {
+                __instance.gameObject.GetComponent<Constructable>().allowedUnderwater = true;
             }
         }
 
