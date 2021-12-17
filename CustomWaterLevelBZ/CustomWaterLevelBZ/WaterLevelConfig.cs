@@ -14,5 +14,9 @@ namespace CustomWaterLevelBZ
         public bool RemoveSchoolsOfFish = false;
         [Toggle(Label = "Mobile Vehicle Bay Fix", Tooltip = "If enabled, allows you to deploy Mobile Vehicle Bays on land.")]
         public bool FixConstructor = true;
+        [Toggle(Label = "Improve PRAWN air mobility", Tooltip = "If enabled, allows the PRAWN Suit to move freely in water AND on land.")]
+        public bool BuffExosuit = true;
+        [Toggle(Label = "Unobtainable resource fix", Tooltip = "If enabled, spawns spiral plants outside of Ventgardens to make the game possible with low water levels.\nRESTART REQUIRED.")]
+        public bool AddSpiralPlants = true;
     }
 }

@@ -121,6 +121,14 @@ namespace CustomWaterLevelBZ
                         {
                             return;
                         }
+                        var waterParkCreature = __instance.gameObject.GetComponent<WaterParkCreature>();
+                        if (waterParkCreature != null)
+                        {
+                            if (waterParkCreature.IsInsideWaterPark())
+                            {
+                                return;
+                            }
+                        }
                         __instance.liveMixin.Kill();
                     }
                 }
@@ -142,6 +150,20 @@ namespace CustomWaterLevelBZ
             public static void AllowedToPilot_Postfix(Hoverbike __instance, ref bool __result)
             {
                 __result = __instance.transform.position.y > Mod.WaterLevel;
+            }
+        }
+
+        [HarmonyPatch(typeof(Exosuit))]
+        internal static class Exosuit_Patches
+        {
+            [HarmonyPatch(nameof(Exosuit.IsUnderwater))]
+            [HarmonyPostfix]
+            public static void IsUnderwater_Postfix(ref bool __result)
+            {
+                if (Mod.config.BuffExosuit)
+                {
+                    __result = true;
+                }
             }
         }
 
@@ -181,7 +203,7 @@ namespace CustomWaterLevelBZ
                 else
                 {
                     __instance.SetFogStartDistance(Mod.DefaultFogDistance);
-                    //__instance.SetFogColorDecay(Mod.DefaultColorDecay);
+                    __instance.SetFogColorDecay(Mod.DefaultColorDecay);
                 }
             }
         }

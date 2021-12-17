@@ -18,6 +18,29 @@ namespace CustomWaterLevelBZ
         {
             Harmony harmony = new Harmony("Lee23.CustomWaterLevelBZ");
             harmony.PatchAll(assembly);
+
+            PatchSpawns();
+        }
+
+        public static void PatchSpawns()
+        {
+            if (config.AddSpiralPlants)
+            {
+                string spiralPlantClassId = "08a2d1df-4a80-47cf-b03c-30e024e5bfe2";
+                LootDistributionHandler.AddLootDistributionData(spiralPlantClassId, new LootDistributionData.SrcData()
+                {
+                    distribution = new List<LootDistributionData.BiomeData>()
+                    {
+                        new LootDistributionData.BiomeData()
+                        {
+                            biome = BiomeType.TreeSpires_Ground,
+                            count = 1,
+                            probability = 0.5f
+                        },
+                    },
+                    prefabPath = spiralPlantClassId
+                });
+            }
         }
 
         public static float WaterLevel
@@ -48,10 +71,9 @@ namespace CustomWaterLevelBZ
             TechType.SmallVentGarden
         };
 
-
         public static float DefaultFogDistance = 0f;
 
-        public static float UndergroundFogDistance = 1.1f;
+        public static float UndergroundFogDistance = 0.6f;
 
         public static float DefaultColorDecay = 0.1f;
 
