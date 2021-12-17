@@ -47,5 +47,40 @@ namespace CustomWaterLevelBZ
             TechType.LargeVentGarden,
             TechType.SmallVentGarden
         };
+
+
+        public static float DefaultFogDistance = 0f;
+
+        public static float UndergroundFogDistance = 1.1f;
+
+        public static float DefaultColorDecay = 0.1f;
+
+        public static float UndergroundColorDecay = 2f;
+
+        public static float CaveDepth = -550f;
+
+        public static float PlayerY
+        {
+            get
+            {
+                if (MainCamera.camera == null)
+                {
+                    return 0f;
+                }
+                return MainCamera.camera.transform.position.y;
+            }
+        }
+
+        public static bool PlayerWalkingInCave
+        {
+            get
+            {
+                if (PlayerY < WaterLevel)
+                {
+                    return false;
+                }
+                return PlayerY < CaveDepth;
+            }
+        }
     }
 }

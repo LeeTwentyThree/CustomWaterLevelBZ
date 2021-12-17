@@ -145,12 +145,53 @@ namespace CustomWaterLevelBZ
             }
         }
 
+        [HarmonyPatch(typeof(VFXWeatherManager))]
+        internal static class VFXWeatherManager_Patches
+        {
+            [HarmonyPatch(nameof(VFXWeatherManager.Update))]
+            [HarmonyPostfix]
+            public static void Update_Postfix(VFXWeatherManager __instance)
+            {
+                __instance.precipitationEnabled = !Mod.PlayerWalkingInCave;
+            }
+
+            [HarmonyPatch(nameof(VFXWeatherManager.UpdateAuroraBorealis))]
+            [HarmonyPostfix]
+            public static void UpdateAuroraBorealis_Postfix(VFXWeatherManager __instance)
+            {
+                if (Mod.PlayerWalkingInCave)
+                {
+                    uSkyManager.main.auroraIntensity = 3f;
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(AerialPerspective))]
+        internal static class AerialPerspective_Patches
+        {
+            [HarmonyPatch(nameof(AerialPerspective.Update))]
+            [HarmonyPostfix]
+            public static void AerialPerspective_Postfix(AerialPerspective __instance)
+            {
+                if (Mod.PlayerWalkingInCave)
+                {
+                    __instance.SetFogStartDistance(Mod.UndergroundFogDistance);
+                    __instance.SetFogColorDecay(Mod.UndergroundColorDecay);
+                }
+                else
+                {
+                    __instance.SetFogStartDistance(Mod.DefaultFogDistance);
+                    //__instance.SetFogColorDecay(Mod.DefaultColorDecay);
+                }
+            }
+        }
+
         [HarmonyPatch(typeof(Constructable))]
         internal static class Constructable_Patches
         {
             [HarmonyPatch(nameof(Constructable.CheckFlags))]
             [HarmonyPostfix]
-            public static void CheckFlags_Prefix(Constructable __instance, ref bool __result, bool allowedInBase, bool allowedInSub, bool allowedOutside, bool allowedUnderwater, Transform aimTransform)
+            public static void CheckFlags_Prefix(ref bool __result, bool allowedInBase, bool allowedInSub, bool allowedOutside, bool allowedUnderwater, Transform aimTransform)
             {
                 if (Player.main.GetCurrentSub() != null || !allowedOutside)
                 {
