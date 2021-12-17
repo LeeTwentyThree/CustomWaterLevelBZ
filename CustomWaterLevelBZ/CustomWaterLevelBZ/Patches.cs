@@ -107,6 +107,10 @@ namespace CustomWaterLevelBZ
             [HarmonyPostfix]
             public static void Postfix(Creature __instance)
             {
+                if (__instance.liveMixin == null)
+                {
+                    return;
+                }   
                 if (Mod.config.SuffocateFish)
                 {
                     var yPos = __instance.transform.position.y;
@@ -141,13 +145,39 @@ namespace CustomWaterLevelBZ
             }
         }
 
-        [HarmonyPatch(typeof(Hoverbike))]
-        [HarmonyPatch(nameof(Hoverbike.Awake))]
-        internal static class Hoverbike_Awake_Patch
+        [HarmonyPatch(typeof(Constructable))]
+        internal static class Constructable_Patches
+        {
+            [HarmonyPatch(nameof(Constructable.CheckFlags))]
+            [HarmonyPostfix]
+            public static void CheckFlags_Prefix(Constructable __instance, ref bool __result, bool allowedInBase, bool allowedInSub, bool allowedOutside, bool allowedUnderwater, Transform aimTransform)
+            {
+                if (Player.main.GetCurrentSub() != null || !allowedOutside)
+                {
+                    return;
+                }
+                else
+                {
+                    if (!allowedUnderwater && aimTransform.position.y > Mod.WaterLevel)
+                    {
+                        __result = true;
+                    }
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(Hoverpad))]
+        [HarmonyPatch(nameof(Hoverpad.OnEnable))]
+        internal static class Hoverpad_Awake_Patch
         {
             [HarmonyPostfix]
-            public static void Postfix(Hoverbike __instance)
+            public static void Postfix(Hoverpad __instance)
             {
+                if (__instance == null)
+                {
+                    Debug.LogError("Hoverpad water level fix failed.");
+                    return;
+                }
                 __instance.gameObject.GetComponent<Constructable>().allowedUnderwater = true;
             }
         }
