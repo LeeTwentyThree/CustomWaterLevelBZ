@@ -502,8 +502,14 @@ namespace CustomWaterLevelBZ
             {
                 if (Mod.config.IceWorms)
                 {
-                    __instance.gameObject.AddComponent<NoiseSource>().noiseLevel = 0.5f;
+                    __instance.gameObject.EnsureComponent<NoiseSource>().noiseLevel = 0.5f;
                 }
+                if (Mod.config.ColdFix)
+                {
+                    __instance.gameObject.EnsureComponent<WarmthUnderground>();
+                }
+                KnownTech.Add(TechType.Pipe, false);
+                KnownTech.Add(TechType.PipeSurfaceFloater, false);
             }
         }
 

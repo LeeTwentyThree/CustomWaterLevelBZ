@@ -20,6 +20,8 @@ namespace CustomWaterLevelBZ
         public bool AddSpiralPlants = true;
         [Toggle(Label = "Adjust creature spawns", Tooltip = "If enabled, spawns land creatures in areas that would otherwise be empty, and vice versa.\nRESTART REQUIRED.")]
         public bool AdjustCreatureSpawns = true;
+        [Toggle(Label = "Warmth fix", Tooltip = "If enabled, you will gain heat while sheltered in caves.")]
+        public bool ColdFix = true;
         [Toggle(Label = "Add ice worms (WIP)", Tooltip = "If enabled, ice worms will visit new areas and attack you.")]
         public bool IceWorms = false;
     }
