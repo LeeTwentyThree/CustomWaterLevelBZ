@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HarmonyLib;
 using UnityEngine;
+using System.Reflection.Emit;
 
 namespace CustomWaterLevelBZ
 {
@@ -81,6 +82,21 @@ namespace CustomWaterLevelBZ
             }
         }
 
+        [HarmonyPatch(typeof(Drowning))]
+        [HarmonyPatch(nameof(Drowning.Update))]
+        internal static class Drowning_Update_Patch
+        {
+            [HarmonyPrefix]
+            public static bool Prefix(Drowning __instance)
+            {
+                if (__instance.gameObject.transform.position.y < Mod.WaterLevel)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
         [HarmonyPatch(typeof(VFXSchoolFish))]
         [HarmonyPatch(nameof(VFXSchoolFish.Awake))]
         internal static class VFXSchoolFish_Awake_Patch
@@ -110,7 +126,7 @@ namespace CustomWaterLevelBZ
                 if (__instance.liveMixin == null)
                 {
                     return;
-                }   
+                }
                 if (Mod.config.SuffocateFish)
                 {
                     var yPos = __instance.transform.position.y;
@@ -242,6 +258,286 @@ namespace CustomWaterLevelBZ
                     return;
                 }
                 __instance.gameObject.GetComponent<Constructable>().allowedUnderwater = true;
+            }
+        }
+
+        [HarmonyPatch(typeof(UnderwaterMotor))]
+        [HarmonyPatch(nameof(UnderwaterMotor.UpdateMove))]
+        public static class UnderwaterMotor_UpdateMove_Patch
+        {
+            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+            {
+                var foundIndex = -1;
+
+                var codes = new List<CodeInstruction>(instructions);
+                for (var i = 0; i < codes.Count; i++)
+                {
+                    if (codes[i].opcode == OpCodes.Ldc_R4)
+                    {
+                        if (codes[i].OperandIs(-0.5f))
+                        {
+                            foundIndex = i;
+                            break;
+                        }
+                    }
+                }
+                if (foundIndex > -1)
+                {
+                    codes[foundIndex].operand = Mod.WaterLevel - 0.5f;
+                }
+
+                return codes.AsEnumerable();
+
+            }
+        }
+
+        [HarmonyPatch(typeof(UnderWaterTracker))]
+        [HarmonyPatch(nameof(UnderWaterTracker.UpdateWaterState))]
+        public static class UnderWaterTracker_UpdateWaterState_Patch
+        {
+            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+            {
+                var foundIndex = -1;
+
+                var codes = new List<CodeInstruction>(instructions);
+                for (var i = 0; i < codes.Count; i++)
+                {
+                    if (codes[i].opcode == OpCodes.Ldc_R4)
+                    {
+                        if (codes[i].OperandIs(0.0f))
+                        {
+                            foundIndex = i;
+                            break;
+                        }
+                    }
+                }
+                if (foundIndex > -1)
+                {
+                    codes[foundIndex].operand = Mod.WaterLevel;
+                }
+
+                return codes.AsEnumerable();
+
+            }
+        }
+
+        [HarmonyPatch(typeof(SeaTruckMotor))]
+        [HarmonyPatch(nameof(SeaTruckMotor.UpdateDrag))]
+        public static class SeaTruckMotor_UpdateDrag_Patch
+        {
+            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+            {
+                var foundIndex = -1;
+
+                var codes = new List<CodeInstruction>(instructions);
+                for (var i = 0; i < codes.Count; i++)
+                {
+                    if (codes[i].opcode == OpCodes.Ldc_R4)
+                    {
+                        if (codes[i].OperandIs(0.0f))
+                        {
+                            foundIndex = i;
+                            break;
+                        }
+                    }
+                }
+                if (foundIndex > -1)
+                {
+                    codes[foundIndex].operand = Mod.WaterLevel;
+                }
+
+                return codes.AsEnumerable();
+
+            }
+        }
+
+        [HarmonyPatch(typeof(SeaTruckMotor))]
+        [HarmonyPatch(nameof(SeaTruckMotor.CanTurn))]
+        public static class SeaTruckMotor_CanTurn_Patch
+        {
+            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+            {
+                var foundIndex = -1;
+
+                var codes = new List<CodeInstruction>(instructions);
+                for (var i = 0; i < codes.Count; i++)
+                {
+                    if (codes[i].opcode == OpCodes.Ldc_R4)
+                    {
+                        if (codes[i].OperandIs(0.0f))
+                        {
+                            foundIndex = i;
+                            break;
+                        }
+                    }
+                }
+                if (foundIndex > -1)
+                {
+                    codes[foundIndex].operand = Mod.WaterLevel;
+                }
+
+                return codes.AsEnumerable();
+
+            }
+        }
+
+        [HarmonyPatch(typeof(SeaTruckSegment))]
+        [HarmonyPatch(nameof(SeaTruckSegment.ReachingOutOfWater))]
+        public static class SeaTruckSegment_ReachingOutOfWater_Patch
+        {
+            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+            {
+                var foundIndex = -1;
+
+                var codes = new List<CodeInstruction>(instructions);
+                for (var i = 0; i < codes.Count; i++)
+                {
+                    if (codes[i].opcode == OpCodes.Ldc_R4)
+                    {
+                        if (codes[i].OperandIs(0.0f))
+                        {
+                            foundIndex = i;
+                            break;
+                        }
+                    }
+                }
+                if (foundIndex > -1)
+                {
+                    codes[foundIndex].operand = Mod.WaterLevel;
+                }
+
+                return codes.AsEnumerable();
+
+            }
+        }
+
+        [HarmonyPatch(typeof(SeaTruckMotor))]
+        [HarmonyPatch(nameof(SeaTruckMotor.Update))]
+        public static class SeaTruckMotor_Update_Patch
+        {
+            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+            {
+                var foundIndex = -1;
+
+                var codes = new List<CodeInstruction>(instructions);
+                for (var i = 0; i < codes.Count; i++)
+                {
+                    if (codes[i].opcode == OpCodes.Ldc_R4)
+                    {
+                        if (codes[i].OperandIs(-1.5f))
+                        {
+                            foundIndex = i;
+                            break;
+                        }
+                    }
+                }
+                if (foundIndex > -1)
+                {
+                    codes[foundIndex].operand = Mod.WaterLevel - 1.5f;
+                }
+
+                return codes.AsEnumerable();
+
+            }
+        }
+
+        [HarmonyPatch(typeof(Locomotion))]
+        [HarmonyPatch(nameof(Locomotion.ManagedFixedUpdate))]
+        public static class Locomotion_ManagedFixedUpdate_Patch
+        {
+            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+            {
+                var foundIndex = -1;
+
+                var codes = new List<CodeInstruction>(instructions);
+                for (var i = 0; i < codes.Count; i++)
+                {
+                    if (codes[i].opcode == OpCodes.Ldc_R4)
+                    {
+                        if (codes[i].OperandIs(0.0f))
+                        {
+                            foundIndex = i;
+                            break;
+                        }
+                    }
+                }
+                if (foundIndex > -1)
+                {
+                    codes[foundIndex].operand = Mod.WaterLevel;
+                }
+
+                return codes.AsEnumerable();
+
+            }
+        }
+
+        [HarmonyPatch(typeof(BaseGhost))]
+        [HarmonyPatch(nameof(BaseGhost.PlaceWithBoundsCast))]
+        internal static class BaseGhost_PlaceWithBoundsCast_Patch
+        {
+            [HarmonyPrefix]
+            public static void Prefix(BaseGhost __instance)
+            {
+                __instance.allowedAboveWater = true;
+            }
+        }
+
+        [HarmonyPatch(typeof(VFXConstructing))]
+        [HarmonyPatch(nameof(VFXConstructing.Awake))]
+        internal static class VFXConstructing_Awake_Patch
+        {
+            [HarmonyPostfix]
+            public static void Postfix(VFXConstructing __instance)
+            {
+                __instance.heightOffset += Mod.WaterLevel;
+            }
+        }
+
+        [HarmonyPatch(typeof(Player))]
+        [HarmonyPatch(nameof(Player.Start))]
+        internal static class Player_Start_Patch
+        {
+            [HarmonyPostfix]
+            public static void Postfix(Player __instance)
+            {
+                if (Mod.config.IceWorms)
+                {
+                    __instance.gameObject.AddComponent<NoiseSource>().noiseLevel = 0.5f;
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(IceWormSpawn))]
+        [HarmonyPatch(nameof(IceWormSpawn.IsValidTarget))]
+        public static class IceWormSpawn_IsValidTarget_Patch
+        {
+            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+            {
+                if (!Mod.config.IceWorms)
+                {
+                    return instructions;
+                }
+
+                var foundIndex = -1;
+
+                var codes = new List<CodeInstruction>(instructions);
+                for (var i = 0; i < codes.Count; i++)
+                {
+                    if (codes[i].opcode == OpCodes.Ldc_R4)
+                    {
+                        if (codes[i].OperandIs(0.0f))
+                        {
+                            foundIndex = i;
+                        }
+                    }
+                }
+                if (foundIndex > -1)
+                {
+                    codes[foundIndex].operand = Mod.WaterLevel;
+                }
+
+                return codes.AsEnumerable();
+
             }
         }
 
