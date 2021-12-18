@@ -9,13 +9,13 @@ namespace CustomWaterLevelBZ
 {
     internal class WarmthUnderground : MonoBehaviour
     {
-        private static LayerMask layerMask = LayerMask.GetMask("Default");
+        private static LayerMask layerMask = LayerMask.GetMask("Default", "TerrainCollider");
 
         private BodyTemperature bodyTemperature;
 
         private float maxDistance = 25f;
 
-        private float heatPerSecond = 1f;
+        private float heatPerSecond = 5f;
 
         private void Start()
         {
@@ -24,13 +24,18 @@ namespace CustomWaterLevelBZ
 
         private void Update()
         {
-            if (transform.position.y > 0f) // dont interfere with vanilla areas
+            float playerY = transform.position.y;
+            if (playerY > 0f) // dont interfere with vanilla areas
+            {
+                return;
+            }
+            if (playerY < Mod.WaterLevel)
             {
                 return;
             }
             if (Physics.Raycast(transform.position, Vector3.up, out RaycastHit hit, maxDistance, layerMask, QueryTriggerInteraction.Ignore))
             {
-                bodyTemperature.AddCold(heatPerSecond * Time.deltaTime);
+                bodyTemperature.AddCold(-heatPerSecond * Time.deltaTime);
             }
         }
     }

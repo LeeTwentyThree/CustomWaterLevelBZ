@@ -508,8 +508,12 @@ namespace CustomWaterLevelBZ
                 {
                     __instance.gameObject.EnsureComponent<WarmthUnderground>();
                 }
-                KnownTech.Add(TechType.Pipe, false);
-                KnownTech.Add(TechType.PipeSurfaceFloater, false);
+                if (Mod.config.UnlockAirPumps)
+                {
+                    KnownTech.Add(TechType.Pipe, false);
+                    KnownTech.Add(TechType.PipeSurfaceFloater, false);
+                    KnownTech.Add(TechType.BasePipeConnector, false);
+                }
             }
         }
 
