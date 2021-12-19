@@ -22,8 +22,10 @@ namespace CustomWaterLevelBZ
         public bool AdjustCreatureSpawns = true;
         [Toggle(Label = "Warmth fix", Tooltip = "If enabled, you will gain heat while sheltered in caves.")]
         public bool ColdFix = true;
-        [Toggle(Label = "Unlock pipes", Tooltip = "If enabled, pipes & air pumps will be unlocked at the start of a new save (they were previously unobtainable).")]
+        [Toggle(Label = "Unlock pipes & pumps", Tooltip = "If enabled, pipes & air pumps will be unlocked at the start of a new save (they were previously unobtainable).")]
         public bool UnlockAirPumps = true;
+        [Toggle(Label = "Pumps generate heat", Tooltip = "If enabled, deployed air pumps will generate heat.")]
+        public bool PumpsGenerateHeat = true;
         [Toggle(Label = "Add ice worms (WIP)", Tooltip = "If enabled, ice worms will visit new areas and attack you.")]
         public bool IceWorms = false;
     }

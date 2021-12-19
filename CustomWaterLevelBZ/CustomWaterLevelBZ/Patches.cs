@@ -72,6 +72,20 @@ namespace CustomWaterLevelBZ
         }
 
         [HarmonyPatch(typeof(PipeSurfaceFloater))]
+        [HarmonyPatch(nameof(PipeSurfaceFloater.Start))]
+        internal static class PipeSurfaceFloater_Start_Patch
+        {
+            [HarmonyPostfix]
+            public static void Postfix(PipeSurfaceFloater __instance)
+            {
+                if (Mod.config.PumpsGenerateHeat)
+                {
+                    __instance.gameObject.EnsureComponent<PumpHeater>();
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(PipeSurfaceFloater))]
         [HarmonyPatch(nameof(PipeSurfaceFloater.UpdateRigidBody))]
         internal static class PipeSurfaceFloater_UpdateRigidbody_Patch
         {
