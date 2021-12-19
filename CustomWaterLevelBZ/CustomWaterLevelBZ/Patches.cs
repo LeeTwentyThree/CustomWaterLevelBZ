@@ -85,6 +85,36 @@ namespace CustomWaterLevelBZ
             }
         }
 
+        [HarmonyPatch(typeof(BaseSurfaceModel))]
+        [HarmonyPatch("IBaseGhostModel.BuildModel")]
+        internal static class BaseSurfaceModel_BuildModel_Patch
+        {
+            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+            {
+                var foundIndex = -1;
+
+                var codes = new List<CodeInstruction>(instructions);
+                for (var i = 0; i < codes.Count; i++)
+                {
+                    if (codes[i].opcode == OpCodes.Ldc_R4)
+                    {
+                        if (codes[i].OperandIs(1f))
+                        {
+                            foundIndex = i;
+                            break;
+                        }
+                    }
+                }
+                if (foundIndex > -1)
+                {
+                    codes[foundIndex].operand = Mod.WaterLevel + 1f;
+                }
+
+                return codes.AsEnumerable();
+
+            }
+        }
+
         [HarmonyPatch(typeof(PipeSurfaceFloater))]
         [HarmonyPatch(nameof(PipeSurfaceFloater.UpdateRigidBody))]
         internal static class PipeSurfaceFloater_UpdateRigidbody_Patch
