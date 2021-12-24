@@ -19,7 +19,14 @@ namespace CustomWaterLevelBZ
             Harmony harmony = new Harmony("Lee23.CustomWaterLevelBZ");
             harmony.PatchAll(assembly);
 
+            PatchPrefabs();
             PatchSpawns();
+        }
+
+        public static void PatchPrefabs()
+        {
+            hatchFixPrefab = new HatchFixPrefab();
+            hatchFixPrefab.Patch();
         }
 
         public static void PatchSpawns()
@@ -53,13 +60,20 @@ namespace CustomWaterLevelBZ
             string hoopfishClassId = "284ceeb6-b437-4aca-a8bd-d54f336cbef8";
             string triopsClassId = "f96f54f1-e323-4841-a025-c86fb1292cbf";
             string penguinClassId = "74ded0e7-d394-4703-9e53-4384b37f9433";
+            string spinnerfishClassId = "29694eb8-0bfa-454d-a5db-21aa39ecd93b";
             string iceWormSpawnerClassId = CraftData.GetClassIdForTechType(TechType.IceWormSpawner);
             if (WaterLevel <= -500f)
             {
-                LootDistributionHandler.EditLootDistributionData(rockPuncherClassId, BiomeType.CrystalCave_Open, 8f, 1);
-                LootDistributionHandler.EditLootDistributionData(rockPuncherClassId, BiomeType.FabricatorCavern_Open, 8f, 1);
+                LootDistributionHandler.EditLootDistributionData(rockPuncherClassId, BiomeType.CrystalCave_Open, 3f, 1);
+                LootDistributionHandler.EditLootDistributionData(rockPuncherClassId, BiomeType.FabricatorCavern_Open, 3f, 1);
                 LootDistributionHandler.EditLootDistributionData(skyRayClassId, BiomeType.CrystalCave_Open, 3f, 2);
                 LootDistributionHandler.EditLootDistributionData(skyRayClassId, BiomeType.FabricatorCavern_Open, 3f, 2);
+                LootDistributionHandler.EditLootDistributionData(pinnacaridClassId, BiomeType.CrystalCave_Open, 3f, 2);
+                LootDistributionHandler.EditLootDistributionData(pinnacaridClassId, BiomeType.FabricatorCavern_Open, 3f, 2);
+                LootDistributionHandler.EditLootDistributionData(penguinClassId, BiomeType.CrystalCave_Open, 3f, 2);
+                LootDistributionHandler.EditLootDistributionData(penguinClassId, BiomeType.FabricatorCavern_Open, 3f, 2);
+                LootDistributionHandler.EditLootDistributionData(spinnerfishClassId, BiomeType.CrystalCave_Open, 3f, 2);
+                LootDistributionHandler.EditLootDistributionData(spinnerfishClassId, BiomeType.FabricatorCavern_Open, 3f, 2);
             }
             if (WaterLevel <= -20f)
             {
@@ -128,7 +142,9 @@ namespace CustomWaterLevelBZ
 
         public static float UndergroundColorDecay = 2f;
 
-        public static float CaveDepth = -550f;
+        public static float CaveDepth = -320;
+
+        internal static HatchFixPrefab hatchFixPrefab;
 
         public static float PlayerY
         {
