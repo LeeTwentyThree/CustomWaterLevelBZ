@@ -41,8 +41,9 @@ namespace CustomWaterLevelBZ
 
         public override List<SpawnLocation> CoordinatedSpawns => new List<SpawnLocation>()
         {
-            new SpawnLocation(new Vector3(552.83f, -202.31f, -1070.81f), Vector3.up * 180f),
-            new SpawnLocation(new Vector3(-254.80f, -126.84f, -249.50f), Vector3.zero),
+            new SpawnLocation(new Vector3(552.83f, -202.31f, -1070.81f), Vector3.up * 180), // omega lab
+            new SpawnLocation(new Vector3(-254.80f, -126.84f, -249.50f), Vector3.zero), // twisty tech site
+            new SpawnLocation(new Vector3(267.75f, -235.27f, -1307.54f), new Vector3(345, 0, 0)), // crashedship 2 (lilypads)
         };
     }
 }

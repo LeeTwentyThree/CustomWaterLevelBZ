@@ -28,7 +28,7 @@ namespace CustomWaterLevelBZ
 
         public void OnHandHover(GUIHand hand)
         {
-            HandReticle.main.SetText(HandReticle.TextType.HandSubscript, enter ? "Enter" : "Exit", false);
+            HandReticle.main.SetText(HandReticle.TextType.Use, "Use", false, GameInput.Button.LeftHand);
         }
 
         private bool AboveWater()
