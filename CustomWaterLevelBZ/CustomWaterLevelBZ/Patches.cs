@@ -21,6 +21,8 @@ namespace CustomWaterLevelBZ
                 __instance.defaultOceanLevel = Mod.WaterLevel;
 
                 UpdateOceanPosition();
+
+                __instance.gameObject.EnsureComponent<OceanHelper>().ocean = __instance;
             }
 
             [HarmonyPatch(nameof(Ocean.RestoreOceanLevel))]
@@ -46,6 +48,7 @@ namespace CustomWaterLevelBZ
             public static void Postfix(WaterPlane __instance)
             {
                 __instance.transform.position = new Vector3(0f, Mod.WaterLevel, 0f);
+                __instance.gameObject.EnsureComponent<SetYToWaterLevel>();
             }
         }
 
@@ -57,6 +60,7 @@ namespace CustomWaterLevelBZ
             public static void Postfix(WaterSurface __instance)
             {
                 __instance.transform.position = new Vector3(0f, Mod.WaterLevel, 0f);
+                __instance.gameObject.EnsureComponent<SetYToWaterLevel>();
             }
         }
 
@@ -67,7 +71,7 @@ namespace CustomWaterLevelBZ
             [HarmonyPostfix]
             public static void Postfix(WorldForces __instance)
             {
-                __instance.waterDepth += Mod.WaterLevel;
+                __instance.gameObject.EnsureComponent<WorldForcesHelper>().worldForces = __instance;
             }
         }
 
@@ -327,11 +331,19 @@ namespace CustomWaterLevelBZ
                 }
                 if (foundIndex > -1)
                 {
-                    codes[foundIndex].operand = Mod.WaterLevel - 0.5f;
+                    codes[foundIndex].operand = WaterLevelMinusPointFive;
                 }
 
                 return codes.AsEnumerable();
 
+            }
+        }
+
+        public static float WaterLevelMinusPointFive
+        {
+            get
+            {
+                return Mod.WaterLevel - 0.5f;
             }
         }
 
@@ -551,6 +563,10 @@ namespace CustomWaterLevelBZ
                 if (Mod.config.ColdFix)
                 {
                     __instance.gameObject.EnsureComponent<WarmthUnderground>();
+                }
+                if (Mod.config.AutomaticChange)
+                {
+                    __instance.gameObject.EnsureComponent<WaterMove>();
                 }
                 if (Mod.config.UnlockAirPumps)
                 {

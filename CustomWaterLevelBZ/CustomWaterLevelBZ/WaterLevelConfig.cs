@@ -28,5 +28,13 @@ namespace CustomWaterLevelBZ
         public bool PumpsGenerateHeat = true;
         [Toggle(Label = "Add ice worms (WIP)", Tooltip = "If enabled, ice worms will visit new areas and attack you.")]
         public bool IceWorms = false;
+        [Toggle(Label = "Enable Automatic Water Change", Tooltip = "If enabled, the water level will change on its own, and will be influenced by the settings below.\nRESTART REQUIRED.")]
+        public bool AutomaticChange = false;
+        [Slider(Label = "Default Water Level", Tooltip = "The level of the water, in meters, relative to the default water level.", DefaultValue = 0, Min = -1250, Max = 500, Step = 5)]
+        public float DefaultWaterLevel = 0f;
+        [Slider(Label = "Time Between Changes", Tooltip = "The amount of time, in seconds, between each water level change.", DefaultValue = 30, Min = 0, Max = 600, Step = 10)]
+        public float IntervalDuration = 60f;
+        [Slider(Label = "Change Per Interval", Tooltip = "The distance in meters that the water will move in each change, up or down.", DefaultValue = 0, Min = -50, Max = 50, Step = 5)]
+        public float IntervalChange = 0f;
     }
 }

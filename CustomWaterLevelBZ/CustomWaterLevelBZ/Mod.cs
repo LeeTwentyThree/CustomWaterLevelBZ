@@ -110,6 +110,11 @@ namespace CustomWaterLevelBZ
         {
             get
             {
+                var wm = WaterMove.main;
+                if (wm != null && wm.InUse)
+                {
+                    return wm.waterLevel;
+                }
                 return config.WaterLevel;
             }
         }
