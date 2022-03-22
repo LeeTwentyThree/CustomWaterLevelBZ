@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 using System.Threading.Tasks;
 using HarmonyLib;
 using UnityEngine;
@@ -111,7 +112,7 @@ namespace CustomWaterLevelBZ
                 }
                 if (foundIndex > -1)
                 {
-                    codes[foundIndex].operand = Mod.WaterLevel + 1f;
+                    EditCodeInstruction(codes, foundIndex, AccessTools.Method(typeof(Patches), nameof(GetLandDoorWaterLevel)));
                 }
 
                 return codes.AsEnumerable();
@@ -331,7 +332,7 @@ namespace CustomWaterLevelBZ
                 }
                 if (foundIndex > -1)
                 {
-                    codes[foundIndex].operand = WaterLevelMinusPointFive;
+                    EditCodeInstruction(codes, foundIndex, AccessTools.Method(typeof(Patches), nameof(GetUpdateMoveWaterLevel)));
                 }
 
                 return codes.AsEnumerable();
@@ -339,12 +340,29 @@ namespace CustomWaterLevelBZ
             }
         }
 
-        public static float WaterLevelMinusPointFive
+        public static float GetUpdateMoveWaterLevel()
         {
-            get
-            {
-                return Mod.WaterLevel - 0.5f;
-            }
+            return Mod.WaterLevel - 0.5f;
+        }
+
+        public static float GetSeaTruckWaterLevel()
+        {
+            return Mod.WaterLevel - 1.5f;
+        }
+
+        public static float GetLandDoorWaterLevel()
+        {
+            return Mod.WaterLevel + 1f;
+        }
+
+        public static float GetWaterLevel()
+        {
+            return Mod.WaterLevel;
+        }
+
+        public static void EditCodeInstruction(List<CodeInstruction> list, int index, MethodInfo targetMethod)
+        {
+            list[index] = new CodeInstruction(OpCodes.Call, targetMethod);
         }
 
         [HarmonyPatch(typeof(UnderWaterTracker))]
@@ -369,7 +387,7 @@ namespace CustomWaterLevelBZ
                 }
                 if (foundIndex > -1)
                 {
-                    codes[foundIndex].operand = Mod.WaterLevel;
+                    EditCodeInstruction(codes, foundIndex, AccessTools.Method(typeof(Patches), nameof(GetWaterLevel)));
                 }
 
                 return codes.AsEnumerable();
@@ -399,7 +417,7 @@ namespace CustomWaterLevelBZ
                 }
                 if (foundIndex > -1)
                 {
-                    codes[foundIndex].operand = Mod.WaterLevel;
+                    EditCodeInstruction(codes, foundIndex, AccessTools.Method(typeof(Patches), nameof(GetWaterLevel)));
                 }
 
                 return codes.AsEnumerable();
@@ -429,7 +447,7 @@ namespace CustomWaterLevelBZ
                 }
                 if (foundIndex > -1)
                 {
-                    codes[foundIndex].operand = Mod.WaterLevel;
+                    EditCodeInstruction(codes, foundIndex, AccessTools.Method(typeof(Patches), nameof(GetWaterLevel)));
                 }
 
                 return codes.AsEnumerable();
@@ -459,7 +477,7 @@ namespace CustomWaterLevelBZ
                 }
                 if (foundIndex > -1)
                 {
-                    codes[foundIndex].operand = Mod.WaterLevel;
+                    EditCodeInstruction(codes, foundIndex, AccessTools.Method(typeof(Patches), nameof(GetWaterLevel)));
                 }
 
                 return codes.AsEnumerable();
@@ -489,7 +507,7 @@ namespace CustomWaterLevelBZ
                 }
                 if (foundIndex > -1)
                 {
-                    codes[foundIndex].operand = Mod.WaterLevel - 1.5f;
+                    EditCodeInstruction(codes, foundIndex, AccessTools.Method(typeof(Patches), nameof(GetSeaTruckWaterLevel)));
                 }
 
                 return codes.AsEnumerable();
@@ -519,7 +537,7 @@ namespace CustomWaterLevelBZ
                 }
                 if (foundIndex > -1)
                 {
-                    codes[foundIndex].operand = Mod.WaterLevel;
+                    EditCodeInstruction(codes, foundIndex, AccessTools.Method(typeof(Patches), nameof(GetWaterLevel)));
                 }
 
                 return codes.AsEnumerable();
@@ -545,7 +563,7 @@ namespace CustomWaterLevelBZ
             [HarmonyPostfix]
             public static void Postfix(VFXConstructing __instance)
             {
-                __instance.heightOffset += Mod.WaterLevel;
+                __instance.gameObject.EnsureComponent<VFXConstructionHelper>().constructing = __instance;
             }
         }
 
@@ -603,7 +621,7 @@ namespace CustomWaterLevelBZ
                 }
                 if (foundIndex > -1)
                 {
-                    codes[foundIndex].operand = Mod.WaterLevel;
+                    EditCodeInstruction(codes, foundIndex, AccessTools.Method(typeof(Patches), nameof(GetWaterLevel)));
                 }
 
                 return codes.AsEnumerable();

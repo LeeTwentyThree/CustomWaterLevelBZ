@@ -13,6 +13,8 @@ namespace CustomWaterLevelBZ
 
         public float waterLevel;
 
+        public float timeLastChange;
+
         private void Awake()
         {
             main = this;
@@ -25,5 +27,10 @@ namespace CustomWaterLevelBZ
                 return Mod.config.AutomaticChange;
             }
         }
+    }
+
+    internal struct SaveWaterMove
+    {
+        public float TimeLastChange;
     }
 }

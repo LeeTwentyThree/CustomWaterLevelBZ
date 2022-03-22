@@ -6,7 +6,7 @@ namespace CustomWaterLevelBZ
     [Menu("Custom Water Level")]
     public class WaterLevelConfig : ConfigFile
     {
-        [Slider(Label = "Water level", Tooltip = "The level of the water, in meters, relative to the default water level.\nRESTART REQUIRED.", DefaultValue = 0, Min = -1250, Max = 500, Step = 5)]
+        [Slider(Label = "Water level", Tooltip = "The level of the water, in meters, relative to the default water level.\nRESTART REQUIRED FOR CERTAIN FEATURES TO TAKE EFFECT.", DefaultValue = 0, Min = -1250, Max = 500, Step = 5)]
         public float WaterLevel = 0f;
         [Toggle(Label = "Suffocate fish", Tooltip = "Whether fish should suffocate when above water or not.")]
         public bool SuffocateFish = true;
