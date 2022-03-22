@@ -178,24 +178,20 @@ namespace CustomWaterLevelBZ
                 }
                 if (Mod.config.SuffocateFish)
                 {
-                    var yPos = __instance.transform.position.y;
-                    if (yPos > Mod.WaterLevel + 3f)
+                    var creatureTechType = CraftData.GetTechType(__instance.gameObject);
+                    if (Mod.AirBreathingCreatures.Contains(creatureTechType))
                     {
-                        var creatureTechType = CraftData.GetTechType(__instance.gameObject);
-                        if (Mod.AirBreathingCreatures.Contains(creatureTechType))
+                        return;
+                    }
+                    var waterParkCreature = __instance.gameObject.GetComponent<WaterParkCreature>();
+                    if (waterParkCreature != null)
+                    {
+                        if (waterParkCreature.IsInsideWaterPark())
                         {
                             return;
                         }
-                        var waterParkCreature = __instance.gameObject.GetComponent<WaterParkCreature>();
-                        if (waterParkCreature != null)
-                        {
-                            if (waterParkCreature.IsInsideWaterPark())
-                            {
-                                return;
-                            }
-                        }
-                        __instance.liveMixin.Kill();
                     }
+                    __instance.gameObject.AddComponent<CreatureSuffocator>().creature = __instance;
                 }
             }
         }
