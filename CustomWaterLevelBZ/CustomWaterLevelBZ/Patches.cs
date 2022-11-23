@@ -274,7 +274,7 @@ namespace CustomWaterLevelBZ
         {
             [HarmonyPatch(nameof(Constructable.CheckFlags))]
             [HarmonyPostfix]
-            public static void CheckFlags_Prefix(ref bool __result, bool allowedInBase, bool allowedInSub, bool allowedOutside, bool allowedUnderwater, Transform aimTransform)
+            public static void CheckFlags_Prefix(ref bool __result, bool allowedInBase, bool allowedInSub, bool allowedOutside, bool allowedUnderwater, Vector3 hitPoint)
             {
                 if (Player.main.GetCurrentSub() != null || !allowedOutside)
                 {
@@ -282,7 +282,7 @@ namespace CustomWaterLevelBZ
                 }
                 else
                 {
-                    if (!allowedUnderwater && aimTransform.position.y > Mod.WaterLevel)
+                    if (!allowedUnderwater && hitPoint.y > Mod.WaterLevel)
                     {
                         __result = true;
                     }
