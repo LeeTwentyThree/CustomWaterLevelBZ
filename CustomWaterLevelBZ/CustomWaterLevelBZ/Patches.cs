@@ -584,9 +584,9 @@ namespace CustomWaterLevelBZ
                 }
                 if (Mod.config.UnlockAirPumps)
                 {
-                    KnownTech.Add(TechType.Pipe, false);
-                    KnownTech.Add(TechType.PipeSurfaceFloater, false);
-                    KnownTech.Add(TechType.BasePipeConnector, false);
+                    KnownTech.Add(TechType.Pipe, true, false);
+                    KnownTech.Add(TechType.PipeSurfaceFloater, true, false);
+                    KnownTech.Add(TechType.BasePipeConnector, true, false);
                 }
             }
         }
